@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Class</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="upload_style.css">      
+    <script src="script.js"></script>
+</head>
+
+<body>
+    <div class="header">
+        <div class="header-title">Dashboard</div>
+        <div class="logout">
+            <a href="login.html" class="button">Logout</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="sidebar-toggle">
+            <i class="fa fa-bars"></i>
+        </div>
+        
+
+
+        <div class="content">
+            <br><br>
+            <h2>Add Student</h2>
+            <form action="upload.php" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+                <label>First Name:</label>
+                <input type="text" name="first_name" required>
+            
+                <label>Last Name:</label>
+                <input type="text" name="last_name" required>
+
+                <label>Register No:</label>
+                <input type="text" name="reg_no" required>
+
+                <label>Description:</label>
+                <textarea name="description" required></textarea>
+                
+               
+                <!-- Inside the form -->
+                <label>Upload Certificate:</label>
+                <input type="file" name="certificate" required><br>
+
+                <label>Uploaded:</label>
+                <input type="checkbox" name="uploaded" value="yes" required> <br><br>
+            
+                <input type="submit" value="Submit">
+
+        
+            </form>
+            <br><br><br><br><br><br><br>
+
+        </div>
+    </div>
+
+    <div class="footer" style="background-color: #333;">
+        <div>
+            <div class="circle" style="background-color: #7e7e7b;">
+                <a href="https://www.gvpcew.ac.in/">
+                    <i class="fa fa-globe"></i>
+                </a>
+            </div>
+            <div class="circle" style="background-color: #3b5998;">
+                <a href="https://www.facebook.com/GayatriVidyaParishad.GVPW/">
+                    <i class="fa fa-facebook"></i>
+                </a>
+            </div>
+            <div class="circle" style="background-color: #1da1f2;">
+                <a href="https://twitter.com/i/flow/login?redirect_after_login=%2Fgvpcew_jg">
+                    <i class="fa fa-twitter"></i>
+                </a>
+            </div>
+            <div class="circle" style="background-color: #0e76a8;">
+                <a href="https://www.linkedin.com/school/gayatri-vidya-parishad-college-of-engineering-for-women-madhurawada-pin-530048-cc-jg-/?originalSubdomain=in">
+                    <i class="fa fa-linkedin"></i>
+                </a>
+            </div>
+            
+            <div class="circle" style="background-color: #ff0000;">
+                <a href="https://www.youtube.com/watch?v=8V05pcCkg1g">
+                    <i class="fa fa-youtube"></i>
+                </a>
+            </div>
+        </div>
+        <div align="center">
+            Made in India <br> Copyright &copy; 2024 GVPCEW
+        </div>
+    </div>
+
+    <script>
+        function validateForm() {
+
+             // Add these lines to check the values
+             console.log("Register No:", regNo);
+             console.log("Description:", description);
+             console.log("File:", file);
+
+
+            var firstName = document.getElementsByName("first_name")[0].value;
+            if (firstName.length === 0) {
+                alert("First Name is required");
+                return false;
+            }
+
+            var lastName = document.getElementsByName("last_name")[0].value;
+            if (lastName.length === 0) {
+                alert("Last Name is required");
+                return false;
+            }
+
+            var regNo = document.getElementsByName("reg_no")[0].value;
+            if (!/^[a-zA-Z0-9]{10}$/.test(regNo)) {
+                alert("Register No must be 10 characters long and can contain both digits and alphabets");
+                return false;
+            }
+
+            var description = document.getElementsByName("description")[0].value;
+            if (description.length === 0) {
+                alert("Description is required");
+                return false;
+            }
+
+            var file = document.getElementsByName("file")[0].value;
+            if (file.length === 0) {
+                alert("File upload is required");
+                return false;
+            }
+
+            var uploaded = document.getElementsByName("uploaded")[0].checked;
+            if (!uploaded) {
+                alert("Uploaded checkbox must be checked");
+                return false;
+            }
+
+            return true; 
+        }
+        // Add this to your existing script
+        
+        document.getElementsByName("image")[0].addEventListener('change', function() {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var img = document.getElementById("uploadedImage");
+                img.style.display = "block";
+                img.src = e.target.result;
+            }
+            reader.readAsDataURL(this.files[0]);
+        });
+
+
+    </script>
+
+</body>
+</html>
+
+
