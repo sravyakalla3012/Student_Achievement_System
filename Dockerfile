@@ -1,15 +1,21 @@
-# Use official PHP 8.2 image with Apache
+# Use official PHP image with Apache
 FROM php:8.2-apache
 
-# Copy project files into Apache server root
+# Enable Apache modules
+RUN a2enmod rewrite
+
+# Allow .htaccess overrides
+RUN sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
+
+# Set server name (to avoid warnings)
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
+# Copy all project files into Apache root
 COPY . /var/www/html/
 
-# Give permissions
+# Set permissions
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html
 
-# Enable Apache mod_rewrite (if needed)
-RUN a2enmod rewrite
-
-# Expose port 80 to the outside world
+# Expose default port
 EXPOSE 80
