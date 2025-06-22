@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="view_style.css">
     <script src="script.js"></script>
-
 </head>
 
 <body>
@@ -21,61 +20,78 @@
         <div class="sidebar-toggle">
             <i class="fa fa-bars"></i>
         </div>
-        
-                    <div id="studentDetailsContent">
-                        <div class="content" id="detailsModal">
-                            <div class="search-container">
-                                <form onsubmit="searchStudents(); return false;">
-                                    <input type="text" id="searchInput" placeholder="Search for names...">
-                                    <button type="submit">Search</button>
-                                </form>
-                            </div>
-                                <table class="student-table">
-                                    <thead>
-                                        <tr>
-                                            <th>S.No</th>
-                                            <th>Name</th>
-                                            <th>Register No</th>
-                                            <th>Description</th>
-                                            
-                                            <th>Cerificate link</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-                                            include 'db.php';
-                                            $sql = "SELECT * FROM certificate";
-                                            $result = $conn->query($sql);
-                                
-                                            if ($result->num_rows > 0) {
-                                                $count = 1;
-                                                while($row = $result->fetch_assoc()) {
-                                                    echo "<tr>";
-                                                    echo "<td>".$count."</td>";
-                                                    echo "<td>".$row['first_name']." ".$row['last_name']."</td>";
-                                                    echo "<td>".$row['reg_no']."</td>";
-                                                    echo "<td>".$row['description']."</td>";
-                                                    
-                                                    echo "<td><a href='uploads/".$row['file']."' target='_blank'>View Certificate</a></td>";
-                                                    echo "<td><button class='delete-button' onclick='deleteStudent(".$row['id'].")'><i class='fas fa-trash'></i></button></td>";
-                                                    echo "</tr>";
-                                                    $count++;
-                                                }
-                                            } else {
-                                                echo "<tr><td colspan='0'>No students found</td></tr>";
-                                            }
-                                
-                                            $conn->close();
-                                        ?>
-                                    </tbody>
-                                </table>
-            
-                        </div>
-                    </div>
-          </div>
 
-          <div class="footer" style="background-color: #333;">
+        <div class="content">
+            <div id="studentDetailsContent">
+                <div class="content" id="detailsModal">
+                    <div class="search-container">
+                        <form onsubmit="searchStudents(); return false;">
+                            <input type="text" id="searchInput" placeholder="Search for names...">
+                            <button type="submit">Search</button>
+                        </form>
+                    </div>
+                    <table class="student-table">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Name</th>
+                                <th>Register No</th>
+                                <th>Description</th>
+                                <th>Batch</th>
+                                <th>Course/Event</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Number of Days</th>
+                                <th>Organized By</th>
+                                <th>Mode of Course</th>
+                                <th>Completed Semester</th>
+                                <th>Awards</th>
+                                <th>Certificate link</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                                include 'db.php';
+                                $sql = "SELECT * FROM certificate";
+                                $result = $conn->query($sql);
+                    
+                                if ($result->num_rows > 0) {
+                                    $count = 1;
+                                    while($row = $result->fetch_assoc()) {
+                                        echo "<tr>";
+                                        echo "<td>".$count."</td>";
+                                        echo "<td>".$row['first_name']." ".$row['last_name']."</td>";
+                                        echo "<td>".$row['reg_no']."</td>";
+                                        echo "<td>".$row['description']."</td>";
+                                        echo "<td>".$row['batch']."</td>";
+                                        echo "<td>".$row['name']."</td>";
+                                        echo "<td>".$row['start_date']."</td>";
+                                        echo "<td>".$row['end_date']."</td>";
+                                        echo "<td>".$row['num_days']."</td>";
+                                        echo "<td>".$row['organiser']."</td>";
+                                        echo "<td>".$row['mode']."</td>";
+                                        echo "<td>".$row['semester']."</td>";
+                                        echo "<td>".$row['awards']."</td>";
+                                        echo "<td><a href='uploads/".$row['file']."' target='_blank'>View Certificate</a></td>";
+                                        echo "<td><button class='delete-button' onclick='deleteStudent(".$row['id'].")'><i class='fas fa-trash'></i></button></td>";
+                                        echo "</tr>";
+                                        $count++;
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='0'>No students found</td></tr>";
+                                }
+                    
+                                $conn->close();
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer" style="background-color: #333;">
         <div>
             <div class="circle" style="background-color: #7e7e7b;">
                 <a href="https://www.gvpcew.ac.in/">
@@ -110,35 +126,6 @@
     </div>
 
     <script>
-      function getStudentDetails($id) {
-            $query = "SELECT * FROM certificate WHERE id = $id";
-            $result = mysqli_query($conn, $query);
-            if ($result && mysqli_num_rows($result) > 0) {
-                return mysqli_fetch_assoc($result);
-            } else {
-                return false;
-            }
-        }
-
-        function viewDetails(id) {
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    var modalContent = document.getElementById("studentDetailsContent");
-                    modalContent.innerHTML = this.responseText;
-                    var modal = document.getElementById("detailsModal");
-                    modal.style.display = "block";
-                }
-            };
-            xhttp.open("GET", "get_details.php?id=" + id, true);
-            xhttp.send();
-        }
-
-        function closeDetailsModal() {
-            var modal = document.getElementById("detailsModal");
-            location.reload();
-        }
-
         function deleteStudent(id) {
             var confirmation = confirm("Are you sure you want to delete this?");
             
@@ -150,7 +137,7 @@
                             alert('Deleted successfully.');
                             location.reload();
                         } else {
-                            alert('Error n deleting .');
+                            alert('Error in deleting.');
                         }
                     }
                 };
@@ -185,12 +172,6 @@
                 }
             }
         }
-
-
-                
-
-
     </script>
-
 </body>
 </html>
